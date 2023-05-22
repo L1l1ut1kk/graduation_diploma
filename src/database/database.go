@@ -48,10 +48,11 @@ func CreateDatabase() {
 	_, err = conn.Exec(`
 		CREATE TABLE IF NOT EXISTS users (
 			id SERIAL PRIMARY KEY,
-			username TEXT,
+			username TEXT,	
 			password TEXT,
 			name TEXT,
-			surname TEXT
+			surname TEXT,
+			mail TEXT
 		)
 	`)
 	if err != nil {

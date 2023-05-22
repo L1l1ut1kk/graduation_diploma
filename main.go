@@ -61,6 +61,17 @@ func main() {
 	r.POST("/login", func(c *gin.Context) {
 		autoriz.LoginHandler(c, db)
 	})
+	r.POST("forgotpassword", func(c *gin.Context) {
+		mail := c.PostForm("mail") // Здесь предполагается, что форма содержит поле "email" для ввода адреса электронной почты
+		err := autoriz.SendPasswordResetEmail(mail)
+		if err != nil {
+			// Обработка ошибки отправки письма
+			c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+			return
+		}
+		// Успешно отправлено
+		c.JSON(http.StatusOK, gin.H{"message": "Письмо для сброса пароля отправлено на указанный адрес."})
+	})
 
 	// r.GET("/cards", GetCardsHandler)
 

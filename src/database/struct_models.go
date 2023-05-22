@@ -8,6 +8,7 @@ type User struct {
 	Password string `json:"password"`
 	Name     string `json:"name"`
 	Surname  string `json:"surname"`
+	Mail     string `json:"mail"`
 }
 
 type Card struct {

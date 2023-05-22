@@ -73,13 +73,10 @@
 					</div>
 
 					<div class="text-center p-t-12">
-						<span class="txt1">
-							Забыли
-						</span>
-						<a class="txt2" href="#">
-							Пароль?
+						<a class="txt2" href="#" onclick="showForgotPasswordForm()">
+							Forgot password?
 						</a>
-						</div>
+					</div>
 
 					<div class="text-center p-t-136">
 						<a class="txt2" href="#" onclick="showSignupForm()">
@@ -95,7 +92,7 @@
 						<span class="login100-form-title">
 							Create your Account
 						</span>
-
+				
 						<div class="wrap-input100 validate-input" data-validate="First Name is required">
 							<input class="input100" type="text" name="firstName" placeholder="First Name" id="firstName">
 							<span class="focus-input100"></span>
@@ -103,7 +100,7 @@
 								<i class="fa fa-user" aria-hidden="true"></i>
 							</span>
 						</div>
-
+				
 						<div class="wrap-input100 validate-input" data-validate="Last Name is required">
 							<input class="input100" type="text" name="lastName" placeholder="Last Name" id="lastName">
 							<span class="focus-input100"></span>
@@ -111,7 +108,7 @@
 								<i class="fa fa-user" aria-hidden="true"></i>
 							</span>
 						</div>
-
+				
 						<div class="wrap-input100 validate-input" data-validate="Username is required">
 							<input class="input100" type="text" name="username" placeholder="Username" id="newUsername">
 							<span class="focus-input100"></span>
@@ -119,7 +116,7 @@
 								<i class="fa fa-user" aria-hidden="true"></i>
 							</span>
 						</div>
-
+				
 						<div class="wrap-input100 validate-input" data-validate="Password is required">
 							<input class="input100" type="password" name="password" placeholder="Password" id="newPassword">
 							<span class="focus-input100"></span>
@@ -127,117 +124,211 @@
 								<i class="fa fa-lock" aria-hidden="true"></i>
 							</span>
 						</div>
-
+						
+						<div class="wrap-input100 validate-input" data-validate="Mail is required">
+							<input class="input100" type="text" name="mail" placeholder="Mail" id="newMail">
+							<span class="focus-input100"></span>
+							<span class="symbol-input100">
+								<i class="fa fa-envelope" aria-hidden="true"></i>
+							</span>
+						</div>
+				
 						<div class="container-login100-form-btn">
 							<button class="login100-form-btn" type="button" onclick="signup()">
 								Signup
 							</button>
 						</div>
+						
+						<div class="text-center p-t-12">
+							<span class="txt1">
+								Already have an account?
+							</span>
+							<a class="txt2" href="#" onclick="showLoginForm()">
+								Login here
+							</a>
+						</div>
+						
 					</form>
 				</div>
-
+				
+				<div id="forgotPasswordForm" style="display: none;">
+					<form class="login100-form validate-form">
+						<span class="login100-form-title">
+							Forgot Password
+						</span>
+						
+						<div class="wrap-input100 validate-input" data-validate="Mail is required">
+							<input class="input100" type="text" name="mail" placeholder="Mail" id="forgotMail">
+							<span class="focus-input100"></span>
+							<span class="symbol-input100">
+								<i class="fa fa-envelope" aria-hidden="true"></i>
+							</span>
+						</div>
+						
+						<div class="container-login100-form-btn">
+							<button class="login100-form-btn" type="button" onclick="sendPasswordResetEmail()">
+								Send Reset Link
+							</button>
+						</div>
+						
+						<div class="text-center p-t-12">
+							<a class="txt2" href="#" onclick="showLoginForm()">
+								Back to Login
+							</a>
+						</div>
+					</form>
+				</div>
+				
 				<!-- Message Containers -->
 				<div id="successMessage" class="success-message" style="display: none;"></div>
 				<div id="errorMessage" class="error-message" style="display: none;"></div>
-			</div>
-		</div>
-	</div>
-	
-	<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
-	<script src="vendor/bootstrap/js/popper.js"></script>
-	<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
-	<script src="vendor/select2/select2.min.js"></script>
-	<script src="vendor/tilt/tilt.jquery.min.js"></script>
-	<script>
-		$('.js-tilt').tilt({
-			scale: 1.1
-		})
-
-		function signup() {
-			var firstName = document.getElementById('firstName').value;
-			var lastName = document.getElementById('lastName').value;
-			var username = document.getElementById('newUsername').value;
-			var password = document.getElementById('newPassword').value;
-
-			var user = {
-				firstName: firstName,
-				lastName: lastName,
-				username: username,
-				password: password
-			};
-
-			fetch('/signup', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(user)
-			})
-			.then(response => response.json())
-			.then(data => {
-				if (data.error) {
-					showErrorMessage('Ошибка регистрации: ' + data.error);
-				} else {
-					showSuccessMessage('Регистрация успешна! ID пользователя: ' + data.id);
-				}
-			})
-			.catch(error => {
-				showErrorMessage('Произошла ошибка: ' + error);
-			});
-		}
-
-		function login() {
-			var username = document.getElementById('username').value;
-			var password = document.getElementById('password').value;
-
-			var credentials = {
-				username: username,
-				password: password
-			};
-
-			fetch('/login', {
-				method: 'POST',
-				headers: {
-					'Content-Type': 'application/json'
-				},
-				body: JSON.stringify(credentials)
-			})
-			.then(response => {
-				if (response.ok) {
-					showSuccessMessage('Вход успешен!');
-				} else {
-					showErrorMessage('Ошибка входа: ' + response.statusText);
-				}
-			})
-			.catch(error => {
-				showErrorMessage('Произошла ошибка: ' + error);
-			});
-		}
-
-		function showSuccessMessage(message) {
-			var successMessage = document.getElementById('successMessage');
-			var errorMessage = document.getElementById('errorMessage');
-			
-			successMessage.style.display = 'block';
-			errorMessage.style.display = 'none';
-			successMessage.innerHTML = message;
-		}
-
-		function showErrorMessage(message) {
-			var successMessage = document.getElementById('successMessage');
-			var errorMessage = document.getElementById('errorMessage');
-			
-			successMessage.style.display = 'none';
-			errorMessage.style.display = 'block';
-			errorMessage.innerHTML = message;
-		}
-
-		function showSignupForm() {
-			var loginForm = document.querySelector('.login100-form');
-			var signupForm = document.getElementById('signupForm');
-			loginForm.style.display = 'none';
-			signupForm.style.display = 'block';
-		}
-	</script>
-</body>
-</html>
+				
+				<script src="vendor/jquery/jquery-3.2.1.min.js"></script>
+				<script src="vendor/bootstrap/js/popper.js"></script>
+				<script src="vendor/bootstrap/js/bootstrap.min.js"></script>
+				<script src="vendor/select2/select2.min.js"></script>
+				<script src="vendor/tilt/tilt.jquery.min.js"></script>
+				<script>
+					$('.js-tilt').tilt({
+						scale: 1.1
+					})
+				
+					function signup() {
+						var firstName = document.getElementById('firstName').value;
+						var lastName = document.getElementById('lastName').value;
+						var username = document.getElementById('newUsername').value;
+						var password = document.getElementById('newPassword').value;
+						var mail = document.getElementById('newMail').value;
+				
+						var user = {
+							firstName: firstName,
+							lastName: lastName,
+							username: username,
+							password: password,
+							mail: mail
+						};
+				
+						fetch('/signup', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify(user)
+						})
+						.then(response => response.json())
+						.then(data => {
+							if (data.error) {
+								showErrorMessage('Ошибка регистрации: ' + data.error);
+							} else {
+								showSuccessMessage('Регистрация успешна! ID пользователя: ' + data.id);
+								showLoginForm(); // автоматический переход к форме авторизации после успешной регистрации
+							}
+						})
+						.catch(error => {
+							showErrorMessage('Произошла ошибка: ' + error);
+						});
+					}
+				
+					function login() {
+						var username = document.getElementById('username').value;
+						var password = document.getElementById('password').value;
+				
+						var credentials = {
+							username: username,
+							password: password
+						};
+				
+						fetch('/login', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify(credentials)
+						})
+						.then(response => {
+							if (response.ok) {
+								showSuccessMessage('Вход успешен!');
+							} else {
+								showErrorMessage('Ошибка входа: ' + response.statusText);
+							}
+						})
+						.catch(error => {
+							showErrorMessage('Произошла ошибка: ' + error);
+						});
+					}
+					
+					function sendPasswordResetEmail() {
+						var mail = document.getElementById('forgotMail').value;
+						
+						fetch('/forgotpassword', {
+							method: 'POST',
+							headers: {
+								'Content-Type': 'application/json'
+							},
+							body: JSON.stringify({ mail: mail })
+						})
+						.then(response => response.json())
+						.then(data => {
+							if (data.error) {
+								showErrorMessage('Ошибка отправки письма: ' + data.error);
+							} else {
+								showSuccessMessage('Письмо для сброса пароля отправлено на указанный адрес.');
+								showLoginForm(); // переброс обратно на страницу логина после отправки письма
+							}
+						})
+						.catch(error => {
+							showErrorMessage('Произошла ошибка: ' + error);
+						});
+					}
+				
+					function showSuccessMessage(message) {
+						var successMessage = document.getElementById('successMessage');
+						var errorMessage = document.getElementById('errorMessage');
+				
+						successMessage.style.display = 'block';
+						errorMessage.style.display = 'none';
+						successMessage.innerHTML = message;
+					}
+				
+					function showErrorMessage(message) {
+						var successMessage = document.getElementById('successMessage');
+						var errorMessage = document.getElementById('errorMessage');
+				
+						successMessage.style.display = 'none';
+						errorMessage.style.display = 'block';
+						errorMessage.innerHTML = message;
+					}
+				
+					function showSignupForm() {
+						var loginForm = document.querySelector('.login100-form');
+						var signupForm = document.getElementById('signupForm');
+						var forgotPasswordForm = document.getElementById('forgotPasswordForm');
+				
+						loginForm.style.display = 'none';
+						signupForm.style.display = 'block';
+						forgotPasswordForm.style.display = 'none';
+					}
+				
+					function showLoginForm() {
+						var loginForm = document.querySelector('.login100-form');
+						var signupForm = document.getElementById('signupForm');
+						var forgotPasswordForm = document.getElementById('forgotPasswordForm');
+				
+						loginForm.style.display = 'block';
+						signupForm.style.display = 'none';
+						forgotPasswordForm.style.display = 'none';
+					}
+					
+					function showForgotPasswordForm() {
+						var loginForm = document.querySelector('.login100-form');
+						var signupForm = document.getElementById('signupForm');
+						var forgotPasswordForm = document.getElementById('forgotPasswordForm');
+				
+						loginForm.style.display = 'none';
+						signupForm.style.display = 'none';
+						forgotPasswordForm.style.display = 'block';
+					}
+				</script>
+				</body>
+				</html>
+				
