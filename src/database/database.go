@@ -86,3 +86,52 @@ func CreateDatabase() {
 
 	log.Println("Tables created successfully")
 }
+
+// func PrintUsers(c *gin.Context) {
+// 	var db *sql.DB
+
+// 	// Указываем параметры подключения к базе данных
+// 	var conninfo string = "user=postgres password=postgres dbname=diplom_rob sslmode=disable"
+// 	conn, err := sql.Open("postgres", conninfo)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	defer conn.Close()
+
+// 	db = conn
+
+// 	// Выполняем запрос на выборку данных из таблицы users
+// 	rows, err := db.Query("SELECT * FROM users")
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+// 	defer rows.Close()
+
+// 	// Создаем срез для хранения пользователей
+// 	users := []User{}
+
+// 	// Обрабатываем результаты запроса
+// 	for rows.Next() {
+// 		var user User
+// 		err = rows.Scan(&user.ID, &user.Username, &user.Password, &user.Name, &user.Surname, &user.Mail)
+// 		if err != nil {
+// 			log.Fatal(err)
+// 		}
+
+// 		users = append(users, user)
+// 	}
+
+// 	if err = rows.Err(); err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// 	// Кодируем пользователей в JSON
+// 	jsonData, err := json.Marshal(users)
+// 	if err != nil {
+// 		log.Fatal(err)
+// 	}
+
+// 	// Выводим JSON
+// 	c.JSON(http.StatusOK, jsonData)
+// 	fmt.Println(string(jsonData))
+// }

@@ -20,7 +20,7 @@ func SignupHandler(c *gin.Context, db *sql.DB) {
 		return
 	}
 
-	// Проверка наличия имени пользователя в базе данных
+	// Check if the username already exists in the database
 	var count int
 	err = db.QueryRow("SELECT COUNT(*) FROM users WHERE username = $1", user.Username).Scan(&count)
 	if err != nil {
@@ -29,7 +29,7 @@ func SignupHandler(c *gin.Context, db *sql.DB) {
 	}
 
 	if count > 0 {
-		// Пользователь существует
+		// User already exists
 		c.JSON(http.StatusConflict, gin.H{"message": "User already exists"})
 		return
 	}
@@ -40,13 +40,16 @@ func SignupHandler(c *gin.Context, db *sql.DB) {
 		return
 	}
 
-	err = db.QueryRow("INSERT INTO users (username, password, name, surname) VALUES ($1, $2, $3, $4) RETURNING id", user.Username, string(hashedPassword), user.Name, user.Surname).Scan(&user.ID)
+	// Store the user's data in the database
+	err = db.QueryRow("INSERT INTO users (username, password, name, surname, mail) VALUES ($1, $2, $3, $4, $5) RETURNING id",
+		user.Username, string(hashedPassword), user.Name, user.Surname, user.Mail).Scan(&user.ID)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
 		return
 	}
 
 	c.JSON(http.StatusOK, user)
+	//fmt.Printf("мэил" + user.Mail + "ид" + string(user.ID) + "имя" + user.Name + "фамилия" + user.Surname + "ник" + user.Username)
 }
 
 func LoginHandler(c *gin.Context, db *sql.DB) {
@@ -98,5 +101,49 @@ func LoginHandler(c *gin.Context, db *sql.DB) {
 
 	c.SetCookie("jwt", tokenString, int(expirationTime.Unix()), "/", "", false, true)
 
-	c.String(http.StatusOK, "Login successful")
+	// Get the ID of the logged-in user
+	var userID int
+	err = db.QueryRow("SELECT id FROM users WHERE username = $1", creds.Username).Scan(&userID)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+}
+func GetUserData(c *gin.Context, db *sql.DB) {
+	// Get the username from the authenticated user's token
+	token, err := c.Cookie("jwt")
+	if err != nil {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	claims := &models.Claims{}
+	tkn, err := jwt.ParseWithClaims(token, claims, func(token *jwt.Token) (interface{}, error) {
+		return []byte("secret"), nil
+	})
+	if err != nil {
+		if err == jwt.ErrSignatureInvalid {
+			c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+			return
+		}
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+	if !tkn.Valid {
+		c.JSON(http.StatusUnauthorized, gin.H{"error": "Unauthorized"})
+		return
+	}
+
+	// Retrieve the user's data from the database
+	var user models.User
+	err = db.QueryRow("SELECT name, surname FROM users WHERE username = $1", claims.Username).Scan(&user.Name, &user.Surname)
+	if err != nil {
+		c.JSON(http.StatusInternalServerError, gin.H{"error": err.Error()})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{
+		"name":    user.Name,
+		"surname": user.Surname,
+	})
 }

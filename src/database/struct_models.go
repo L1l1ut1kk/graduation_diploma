@@ -3,12 +3,12 @@ package models
 import "github.com/dgrijalva/jwt-go"
 
 type User struct {
-	ID       int    `json:"id"`
 	Username string `json:"username"`
 	Password string `json:"password"`
 	Name     string `json:"name"`
 	Surname  string `json:"surname"`
 	Mail     string `json:"mail"`
+	ID       int    `json:"id"`
 }
 
 type Card struct {

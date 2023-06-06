@@ -25,42 +25,59 @@ func main() {
 	//r.StaticFS("/static", http.Dir("/home/lutik/Desktop/diplom/frontend"))
 	r.LoadHTMLFiles(
 		"/home/lutik/Desktop/diplom/frontend/login/index.html",
+		"/home/lutik/Desktop/diplom/frontend/login/cards.html",
+
 		// Другие шаблоны, которые нужно загрузить
 	)
+	r.StaticFile("/vendor/bootstrap/css/bootstrap.min.css", "./frontend/login/vendor/bootstrap/css/bootstrap.min.css")
+	r.StaticFile("/fonts/font-awesome-4.7.0/css/font-awesome.min.css", "./frontend/login/fonts/font-awesome-4.7.0/css/font-awesome.min.css")
+	r.StaticFile("/vendor/select2/select2.min.css", "./frontend/login/vendor/select2/select2.min.css")
+	r.StaticFile("/vendor/css-hamburgers/hamburgers.min.css", "./frontend/login/vendor/css-hamburgers/hamburgers.min.css")
+	r.StaticFile("/vendor/animate/animate.css", "./frontend/login/vendor/animate/animate.css")
+	r.StaticFile("/css/util.css", "./frontend/login/css/util.css")
+	r.StaticFile("/css/main.css", "./frontend/login/css/main.css")
+	r.StaticFile("/images/img-01.png", "./frontend/login/images/img-01.png")
+	r.StaticFile("/vendor/jquery/jquery-3.2.1.min.js", "./frontend/login/vendor/jquery/jquery-3.2.1.min.js")
+	r.StaticFile("/vendor/bootstrap/js/popper.js", "./frontend/login/vendor/bootstrap/js/popper.js")
+	r.StaticFile("/vendor/bootstrap/js/bootstrap.min.js", "./frontend/login/vendor/bootstrap/js/bootstrap.min.js")
+	r.StaticFile("/vendor/select2/select2.min.js", "./frontend/login/vendor/select2/select2.min.js")
+	r.StaticFile("/vendor/tilt/tilt.jquery.min.js", "./frontend/login/vendor/tilt/tilt.jquery.min.js")
+	r.StaticFile("/js/main.js", "./frontend/login/js/main.js")
+	r.StaticFile("/fonts/poppins/Poppins-Bold.ttf", "./frontend/login/fonts/poppins/Poppins-Bold.ttf")
+	r.StaticFile("/poppins/Poppins-Medium.ttf", "./frontend/login/fonts/poppins/Poppins-Medium.ttf")
+	r.StaticFile("/fonts/poppins/Poppins-Regular.ttf", "./frontend/login/fonts/poppins/Poppins-Regular.ttf")
+	r.StaticFile("/fonts/montserrat/Montserrat-Bold.ttf", "./frontend/login/fonts/montserrat/Montserrat-Bold.ttf")
+	r.StaticFile("/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff2", "./frontend/login/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff2?v=4.7.0")
+	r.StaticFile("/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff", "./frontend/login/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff?v=4.7.0")
+	r.StaticFile("/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.ttf", "./frontend/login/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.ttf?v=4.7.0")
 	//loadTemplates(r, "frontend/login")
 	//r.LoadHTMLGlob("frontend/****/***/**/*")
 	//r.Static("/static", "./frontend")
-	r.StaticFile("/vendor/bootstrap/css/bootstrap.min.css", "./frontend/vendor/bootstrap/css/bootstrap.min.css")
-	r.StaticFile("/fonts/font-awesome-4.7.0/css/font-awesome.min.css", "./frontend/fonts/font-awesome-4.7.0/css/font-awesome.min.css")
-	r.StaticFile("/vendor/select2/select2.min.css", "./frontend/vendor/select2/select2.min.css")
-	r.StaticFile("/vendor/css-hamburgers/hamburgers.min.css", "./frontend/vendor/css-hamburgers/hamburgers.min.css")
-	r.StaticFile("/vendor/animate/animate.css", "./frontend/vendor/animate/animate.css")
-	r.StaticFile("/css/util.css", "./frontend/css/util.css")
-	r.StaticFile("/css/main.css", "./frontend/css/main.css")
-	r.StaticFile("/images/img-01.png", "./frontend/login/images/img-01.png")
-	r.StaticFile("/vendor/jquery/jquery-3.2.1.min.js", "./frontend/vendor/jquery/jquery-3.2.1.min.js")
-	r.StaticFile("/vendor/bootstrap/js/popper.js", "./frontend/vendor/bootstrap/js/popper.js")
-	r.StaticFile("/vendor/bootstrap/js/bootstrap.min.js", "./frontend/vendor/bootstrap/js/bootstrap.min.js")
-	r.StaticFile("/vendor/select2/select2.min.js", "./frontend/vendor/select2/select2.min.js")
-	r.StaticFile("/vendor/tilt/tilt.jquery.min.js", "./frontend/vendor/tilt/tilt.jquery.min.js")
-	r.StaticFile("/js/main.js", "./frontend/js/main.js")
-	r.StaticFile("/fonts/poppins/Poppins-Bold.ttf", "./frontend/fonts/poppins/Poppins-Bold.ttf")
-	r.StaticFile("/poppins/Poppins-Medium.ttf", "./frontend/fonts/poppins/Poppins-Medium.ttf")
-	r.StaticFile("/fonts/poppins/Poppins-Regular.ttf", "./frontend/fonts/poppins/Poppins-Regular.ttf")
-	r.StaticFile("/fonts/montserrat/Montserrat-Bold.ttf", "./frontend/fonts/montserrat/Montserrat-Bold.ttf")
-	r.StaticFile("/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff2", "./frontend/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff2?v=4.7.0")
-	r.StaticFile("/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff", "./frontend/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.woff?v=4.7.0")
-	r.StaticFile("/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.ttf", "./frontend/fonts/font-awesome-4.7.0/fonts/fontawesome-webfont.ttf?v=4.7.0")
+
 	//r.Static("/images", "./frontend/login/images")
 	r.GET("/", func(c *gin.Context) {
 		c.HTML(http.StatusOK, "index.html", gin.H{})
+
 	})
+	r.GET("/cards.html", func(c *gin.Context) {
+
+		c.HTML(http.StatusOK, "cards.html", nil)
+	})
+	r.GET("/get_user_data", func(c *gin.Context) {
+		autoriz.GetUserData(c, db)
+	})
+
 	r.POST("/signup", func(c *gin.Context) {
 		autoriz.SignupHandler(c, db)
 	})
+
 	r.POST("/login", func(c *gin.Context) {
 		autoriz.LoginHandler(c, db)
 	})
+
+	// r.GET("/mod", func(c *gin.Context) {
+	// 	models.PrintUsers(c)
+	// })
 	r.POST("forgotpassword", func(c *gin.Context) {
 		mail := c.PostForm("mail") // Здесь предполагается, что форма содержит поле "email" для ввода адреса электронной почты
 		err := autoriz.SendPasswordResetEmail(mail)

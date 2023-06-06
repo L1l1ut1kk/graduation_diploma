@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Cards</title>
+</head>
+<body>
+    <h1>Привет, <span id="name"></span> <span id="surname"></span>!</h1>
+
+    <script>
+        // Получение данных из JSON-ответа сервера
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', '/get_user_data', true);
+        xhr.onload = function () {
+            if (xhr.readyState === 4 && xhr.status === 200) {
+                var data = JSON.parse(xhr.responseText);
+                document.getElementById('name').textContent = data.name;
+                document.getElementById('surname').textContent = data.surname;
+            }
+        };
+        xhr.send();
+    </script>
+</body>
+</html>
